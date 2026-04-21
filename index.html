@@ -170,7 +170,7 @@ function isOpenNow(hours) {
 }
 
 function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371;
+  const R = 3958.8;
 
   const dLat = (lat2 - lat1) * Math.PI/180;
   const dLon = (lon2 - lon1) * Math.PI/180;
@@ -262,7 +262,7 @@ function handleGeo(data) {
     marker.bindPopup(
       `<b>${vet.name}</b><br>
       ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
-      ${vet.distance.toFixed(1)} km away<br>
+     ${vet.distance.toFixed(1)} miles away
       ${vet.phone}<br><br>
       <b>Today:</b><br>
       ${formatHours(vet.hours[day])}`
