@@ -271,8 +271,8 @@ marker.bindPopup(
   `<b>${vet.name}</b><br>
   ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
   ${vet.distance.toFixed(1)} miles away<br>
-  ${vet.phone}<br>
   ${vet.address}<br><br>
+  ${vet.phone}<br>
   <b>Today:</b><br>
   ${formatHours(vet.hours[day])}`
 );
