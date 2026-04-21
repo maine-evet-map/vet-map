@@ -35,6 +35,7 @@ const vets = [
     name: "Eastern Maine Emergency Vet (Holden)",
     lat: 44.7446,
     lng: -68.6788,
+   address: "820 Main Road, Holden, ME 04429"
     phone: "(207) 989-6267",
     hours: {
       mon: [[0,24]],
@@ -51,6 +52,7 @@ const vets = [
     name: "Midcoast Animal Emergency Clinic (Warren)",
     lat: 44.1209,
     lng: -69.2570,
+    address: "191 Camden Road, Warren, ME 04864"
     phone: "(207) 273-1100",
     hours: {
       mon: [[17.5,24],[0,7.5]],
@@ -67,6 +69,7 @@ const vets = [
     name: "Animal Emergency Clinic of Mid-Maine (Lewiston)",
     lat: 44.0916,
     lng: -70.2148,
+    address: "37 Strawberry Avenue, Lewiston, ME 04240"
     phone: "(207) 777-1110",
     hours: {
       mon: [[17,24],[0,8]],
@@ -83,6 +86,7 @@ const vets = [
     name: "Portland Veterinary Emergency and Specialty",
     lat: 43.6795,
     lng: -70.3120,
+    address: "739 Warren Avenue, Portland, ME 04103"
     phone: "(207) 600-5044",
     hours: {
       mon: [[0,24]], tue: [[0,24]], wed: [[0,24]],
@@ -94,6 +98,7 @@ const vets = [
     name: "Maine Veterinary Medical Center (Scarborough)",
     lat: 43.5967,
     lng: -70.3370,
+    address: "1500 Technology Way, Scarborough, ME 04074"
     phone: "(207) 885-1290",
     hours: {
       mon: [[0,24]], tue: [[0,24]], wed: [[0,24]],
@@ -105,6 +110,7 @@ const vets = [
     name: "Aroostook Animal Emergency Services (Mars Hill)",
     lat: 46.5137,
     lng: -67.8665,
+    address: "64 Main Street, Mars Hill, Maine 04758"
     phone: "(207) 531-4905",
     hours: {
       mon: [],
@@ -121,6 +127,7 @@ const vets = [
     name: "Atlas Veterinary Urgent Care (Augusta)",
     lat: 44.3106,
     lng: -69.7450,
+    address: "525 Eastern Avenue, Augusta, Maine 04330"
     phone: "(207) 621-2287",
     hours: {
       mon: [[12,20]],
@@ -137,6 +144,7 @@ const vets = [
     name: "PetMedic (Freeport)",
     lat: 43.8570,
     lng: -70.1037,
+    address: "200 Lower Main Street, Freeport, Maine, 04032"
     phone: "(207) 805-5398",
     hours: {
       mon: [[10,20]], tue: [[10,20]], wed: [[10,20]],
@@ -259,14 +267,15 @@ function handleGeo(data) {
 
     const marker = L.marker([vet.lat, vet.lng]).addTo(map);
 
-    marker.bindPopup(
-      `<b>${vet.name}</b><br>
-      ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
-     ${vet.distance.toFixed(1)} miles away
-      ${vet.phone}<br><br>
-      <b>Today:</b><br>
-      ${formatHours(vet.hours[day])}`
-    );
+marker.bindPopup(
+  `<b>${vet.name}</b><br>
+  ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
+  ${vet.distance.toFixed(1)} miles away<br>
+  ${vet.phone}<br>
+  ${vet.address}<br><br>
+  <b>Today:</b><br>
+  ${formatHours(vet.hours[day])}`
+);
 
     markers.push(marker);
 
