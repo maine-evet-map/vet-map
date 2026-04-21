@@ -278,9 +278,28 @@ marker.bindPopup(
 );
 
     markers.push(marker);
+    const closestVet = vetsWithStatus.find(v => v.open) || vetsWithStatus[0];
+    vetsWithStatus.forEach((vet) => {
 
-    if (i === 0) marker.openPopup();
-  });
+  const marker = L.marker([vet.lat, vet.lng]).addTo(map);
+
+  marker.bindPopup(
+    `<b>${vet.name}</b><br>
+    ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
+    ${vet.distance.toFixed(1)} miles away<br>
+    ${vet.phone}<br>
+    ${vet.address ? vet.address : ""}<br><br>
+    <b>Today:</b><br>
+    ${formatHours(vet.hours[day])}`
+  );
+
+  markers.push(marker);
+
+  // ONLY open popup for the true closest vet
+  if (vet.name === closestVet.name) {
+    marker.openPopup();
+  }
+});
 }
 
 </script>
