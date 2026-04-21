@@ -25,7 +25,6 @@
 
 <script>
 
-
 // =====================
 // DATA
 // =====================
@@ -71,6 +70,37 @@ function isOpenNow(hours) {
   return false;
 }
 
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+
+  const dLat = (lat2 - lat1) * Math.PI/180;
+  const dLon = (lon2 - lon1) * Math.PI/180;
+
+  const a =
+    Math.sin(dLat/2)**2 +
+    Math.cos(lat1*Math.PI/180) *
+    Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLon/2)**2;
+
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+}
+
+function formatHours(ranges) {
+  if (!ranges || ranges.length === 0) return "Closed";
+
+  return ranges.map(([open, close]) => {
+    const fmt = h => {
+      const hour = Math.floor(h);
+      const min = Math.round((h - hour) * 60);
+      const ampm = hour >= 12 ? "PM" : "AM";
+      const h12 = ((hour + 11) % 12) + 1;
+      return `${h12}:${min.toString().padStart(2,"0")} ${ampm}`;
+    };
+
+    return `${fmt(open)} – ${fmt(close)}`;
+  }).join(" / ");
+}
+
 
 // =====================
 // DISPLAY
@@ -82,8 +112,67 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap'
 }).addTo(map);
 
+let markers = [];
+
+function clearMarkers() {
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+}
+
 function search() {
-  alert("If you see this, your script is working 👍");
+  const address = document.getElementById("address").value;
+
+  const script = document.createElement("script");
+  script.src =
+    "https://nominatim.openstreetmap.org/search?format=json&q=" +
+    encodeURIComponent(address) +
+    "&json_callback=handleGeo";
+
+  document.body.appendChild(script);
+}
+
+function handleGeo(data) {
+  if (!data || data.length === 0) {
+    alert("Location not found");
+    return;
+  }
+
+  clearMarkers();
+
+  const userLat = parseFloat(data[0].lat);
+  const userLng = parseFloat(data[0].lon);
+
+  map.setView([userLat, userLng], 10);
+
+  const vetsWithStatus = vets
+    .map(v => {
+      const open = isOpenNow(v.hours);
+      const distance = getDistance(userLat, userLng, v.lat, v.lng);
+      return { ...v, open, distance };
+    })
+    .sort((a, b) => {
+      if (a.open !== b.open) return b.open - a.open;
+      return a.distance - b.distance;
+    });
+
+  vetsWithStatus.forEach((vet, i) => {
+    const day = ["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()];
+
+    const marker = L.marker([vet.lat, vet.lng]).addTo(map);
+
+    marker.bindPopup(
+      `<b>${vet.name}</b><br>
+      ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
+      ${vet.distance.toFixed(1)} km away<br>
+      ${vet.phone}<br><br>
+      <b>Today:</b><br>
+      ${formatHours(vet.hours[day])}`
+    );
+
+    markers.push(marker);
+
+    if (i === 0) marker.openPopup();
+  });
 }
 
 </script>
