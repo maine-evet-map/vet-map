@@ -257,10 +257,11 @@ const vetsWithStatus = vets
     return a.distance - b.distance;
   });
 
-  if (openVets.length === 0) {
-    alert("No open vets found right now");
-    return;
-  }
+ const anyOpen = vetsWithStatus.some(v => v.open);
+
+if (!anyOpen) {
+  alert("No vets are currently open, but showing closest options anyway.");
+}
 
   vetsWithStatus.forEach((vet, i) => {
     const marker = L.marker([vet.lat, vet.lng]).addTo(map);
