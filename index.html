@@ -262,44 +262,29 @@ function handleGeo(data) {
       return a.distance - b.distance;
     });
 
-  vetsWithStatus.forEach((vet, i) => {
+  const closestVet = vetsWithStatus.find(v => v.open) || vetsWithStatus[0];
+
+  vetsWithStatus.forEach((vet) => {
     const day = ["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()];
 
     const marker = L.marker([vet.lat, vet.lng]).addTo(map);
 
-marker.bindPopup(
-  `<b>${vet.name}</b><br>
-  ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
-  ${vet.distance.toFixed(1)} miles away<br>
-  ${vet.address}<br>
-  ${vet.phone}<br><br>
-  <b>Today:</b><br>
-  ${formatHours(vet.hours[day])}`
-);
+    marker.bindPopup(
+      `<b>${vet.name}</b><br>
+      ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
+      ${vet.distance.toFixed(1)} miles away<br>
+      ${vet.address ? vet.address : ""}<br>
+      ${vet.phone}<br><br>
+      <b>Today:</b><br>
+      ${formatHours(vet.hours[day])}`
+    );
 
     markers.push(marker);
-    const closestVet = vetsWithStatus.find(v => v.open) || vetsWithStatus[0];
-    vetsWithStatus.forEach((vet) => {
 
-  const marker = L.marker([vet.lat, vet.lng]).addTo(map);
-
-  marker.bindPopup(
-    `<b>${vet.name}</b><br>
-    ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
-    ${vet.distance.toFixed(1)} miles away<br>
-    ${vet.phone}<br>
-    ${vet.address ? vet.address : ""}<br><br>
-    <b>Today:</b><br>
-    ${formatHours(vet.hours[day])}`
-  );
-
-  markers.push(marker);
-
-  // ONLY open popup for the true closest vet
-  if (vet.name === closestVet.name) {
-    marker.openPopup();
-  }
-});
+    if (vet.name === closestVet.name) {
+      marker.openPopup();
+    }
+  });
 }
 
 </script>
