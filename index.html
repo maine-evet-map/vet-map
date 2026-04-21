@@ -1,38 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Emergency Vet Finder</title>
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-
-  <style>
-    body { font-family: Arial; margin: 15px; }
-    #map { height: 500px; margin-top: 10px; }
-    input { width: 300px; padding: 8px; }
-    button { padding: 8px 12px; cursor: pointer; }
-  </style>
-</head>
-
-<body>
-
-<h2>Emergency Vet Finder</h2>
-
-<input id="address" placeholder="Enter location (e.g. Bangor, ME)">
-<button onclick="search()">Search</button>
-
-<div id="map"></div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<script>
-
 // =====================
-// VET DATA
+// DATA (vet database)
 // =====================
+
+
 
 const vets = [
-
   {
     name: "Eastern Maine Emergency Vet (Holden)",
     lat: 44.7446,
@@ -47,115 +19,22 @@ const vets = [
       sat: [[0,24]],
       sun: [[0,24]]
     }
-  },
-
-  {
-    name: "Midcoast Animal Emergency Clinic (Warren)",
-    lat: 44.1209,
-    lng: -69.2570,
-    phone: "(207) 273-1100",
-    hours: {
-      mon: [[17.5,24],[0,7.5]],
-      tue: [[17.5,24],[0,7.5]],
-      wed: [[17.5,24],[0,7.5]],
-      thu: [[17.5,24],[0,7.5]],
-      fri: [[17.5,24],[0,7.5]],
-      sat: [[0,24]],
-      sun: [[0,24]]
-    }
-  },
-
-  {
-    name: "Animal Emergency Clinic of Mid-Maine (Lewiston)",
-    lat: 44.0916,
-    lng: -70.2148,
-    phone: "(207) 777-1110",
-    hours: {
-      mon: [[17,24],[0,8]],
-      tue: [[17,24],[0,8]],
-      wed: [[17,24],[0,8]],
-      thu: [[17,24],[0,8]],
-      fri: [[17,24],[0,8]],
-      sat: [[0,24]],
-      sun: [[0,24]]
-    }
-  },
-
-  {
-    name: "Portland Veterinary Emergency and Specialty",
-    lat: 43.6795,
-    lng: -70.3120,
-    phone: "(207) 600-5044",
-    hours: {
-      mon: [[0,24]], tue: [[0,24]], wed: [[0,24]],
-      thu: [[0,24]], fri: [[0,24]], sat: [[0,24]], sun: [[0,24]]
-    }
-  },
-
-  {
-    name: "Maine Veterinary Medical Center (Scarborough)",
-    lat: 43.5967,
-    lng: -70.3370,
-    phone: "(207) 885-1290",
-    hours: {
-      mon: [[0,24]], tue: [[0,24]], wed: [[0,24]],
-      thu: [[0,24]], fri: [[0,24]], sat: [[0,24]], sun: [[0,24]]
-    }
-  },
-
-  {
-    name: "Aroostook Animal Emergency Services (Mars Hill)",
-    lat: 46.5137,
-    lng: -67.8665,
-    phone: "(207) 531-4905",
-    hours: {
-      mon: [],
-      tue: [],
-      wed: [],
-      thu: [[16,24]],
-      fri: [[16,24]],
-      sat: [[12,24]],
-      sun: [[16,24]]
-    }
-  },
-
-  {
-    name: "Atlas Veterinary Urgent Care (Augusta)",
-    lat: 44.3106,
-    lng: -69.7450,
-    phone: "(207) 621-2287",
-    hours: {
-      mon: [[12,20]],
-      tue: [[12,20]],
-      wed: [[12,20]],
-      thu: [[12,20]],
-      fri: [[12,20]],
-      sat: [[10,20]],
-      sun: [[10,18]]
-    }
-  },
-
-  {
-    name: "PetMedic (Freeport)",
-    lat: 43.8570,
-    lng: -70.1037,
-    phone: "(207) 805-5398",
-    hours: {
-      mon: [[10,20]], tue: [[10,20]], wed: [[10,20]],
-      thu: [[10,20]], fri: [[10,20]], sat: [[10,20]], sun: [[10,20]]
-    }
   }
-
+  // (rest of your vets go here)
 ];
 
+
+
 // =====================
-// OPEN CHECK
+// LOGIC (rules + calculations)
 // =====================
+
+
 
 function isOpenNow(hours) {
   const now = new Date();
   const day = ["sun","mon","tue","wed","thu","fri","sat"][now.getDay()];
-  const current = now.getHours() + now.getMinutes()/60;
+  const current = now.getHours() + now.getMinutes() / 60;
 
   const ranges = hours[day] || [];
 
@@ -170,9 +49,7 @@ function isOpenNow(hours) {
   return false;
 }
 
-// =====================
-// DISTANCE
-// =====================
+                                       
 
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -189,9 +66,25 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 }
 
-// =====================
-// MAP
-// =====================
+
+
+function formatHours(ranges) {
+  if (!ranges || ranges.length === 0) return "Closed";
+
+  return ranges.map(([open, close]) => {
+    const fmt = h => {
+      const hour = Math.floor(h);
+      const min = Math.round((h - hour) * 60);
+      const ampm = hour >= 12 ? "PM" : "AM";
+      const h12 = ((hour + 11) % 12) + 1;
+      return `${h12}:${min.toString().padStart(2,"0")} ${ampm}`;
+    };
+
+    return `${fmt(open)} – ${fmt(close)}`;
+  }).join(" / ");
+}
+
+
 
 const map = L.map('map').setView([44.5, -69.5], 7);
 
@@ -206,17 +99,10 @@ function clearMarkers() {
   markers = [];
 }
 
-// =====================
-// SEARCH (JSONP)
-// =====================
+
 
 function search() {
   const address = document.getElementById("address").value;
-
-  if (!address) {
-    alert("Enter a location");
-    return;
-  }
 
   const script = document.createElement("script");
   script.src =
@@ -227,9 +113,12 @@ function search() {
   document.body.appendChild(script);
 }
 
+
 // =====================
-// CALLBACK
+// 🟩 DISPLAY (map + UI behavior)
 // =====================
+
+
 
 function handleGeo(data) {
   if (!data || data.length === 0) {
@@ -244,42 +133,33 @@ function handleGeo(data) {
 
   map.setView([userLat, userLng], 10);
 
-const vetsWithStatus = vets
-  .map(v => {
-    const open = isOpenNow(v.hours);
-    const distance = getDistance(userLat, userLng, v.lat, v.lng);
-
-    return { ...v, open, distance };
-  })
-  .sort((a, b) => {
-    // open vets first, then by distance
-    if (a.open !== b.open) return b.open - a.open;
-    return a.distance - b.distance;
-  });
-
- const anyOpen = vetsWithStatus.some(v => v.open);
-
-if (!anyOpen) {
-  alert("No vets are currently open, but showing closest options anyway.");
-}
+  const vetsWithStatus = vets
+    .map(v => {
+      const open = isOpenNow(v.hours);
+      const distance = getDistance(userLat, userLng, v.lat, v.lng);
+      return { ...v, open, distance };
+    })
+    .sort((a, b) => {
+      if (a.open !== b.open) return b.open - a.open;
+      return a.distance - b.distance;
+    });
 
   vetsWithStatus.forEach((vet, i) => {
+    const day = ["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()];
+
     const marker = L.marker([vet.lat, vet.lng]).addTo(map);
 
-marker.bindPopup(
-  `<b>${vet.name}</b><br>
-   ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
-   ${vet.distance.toFixed(1)} km away<br>
-   ${vet.phone}`
-);
+    marker.bindPopup(
+      `<b>${vet.name}</b><br>
+      ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
+      ${vet.distance.toFixed(1)} km away<br>
+      ${vet.phone}<br><br>
+      <b>Today:</b><br>
+      ${formatHours(vet.hours[day])}`
+    );
 
     markers.push(marker);
 
     if (i === 0) marker.openPopup();
   });
 }
-
-</script>
-
-</body>
-</html>
