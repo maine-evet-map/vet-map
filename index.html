@@ -244,27 +244,33 @@ function handleGeo(data) {
 
   map.setView([userLat, userLng], 10);
 
-  const openVets = vets
-    .filter(v => isOpenNow(v.hours))
-    .map(v => ({
-      ...v,
-      distance: getDistance(userLat, userLng, v.lat, v.lng)
-    }))
-    .sort((a,b) => a.distance - b.distance);
+const vetsWithStatus = vets
+  .map(v => {
+    const open = isOpenNow(v.hours);
+    const distance = getDistance(userLat, userLng, v.lat, v.lng);
+
+    return { ...v, open, distance };
+  })
+  .sort((a, b) => {
+    // open vets first, then by distance
+    if (a.open !== b.open) return b.open - a.open;
+    return a.distance - b.distance;
+  });
 
   if (openVets.length === 0) {
     alert("No open vets found right now");
     return;
   }
 
-  openVets.forEach((vet, i) => {
+  vetsWithStatus.forEach((vet, i) => {
     const marker = L.marker([vet.lat, vet.lng]).addTo(map);
 
-    marker.bindPopup(
-      `<b>${vet.name}</b><br>
-       ${vet.distance.toFixed(1)} km away<br>
-       ${vet.phone}`
-    );
+marker.bindPopup(
+  `<b>${vet.name}</b><br>
+   ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
+   ${vet.distance.toFixed(1)} km away<br>
+   ${vet.phone}`
+);
 
     markers.push(marker);
 
