@@ -36,6 +36,7 @@ const vets = [
     lat: 44.7446,
     lng: -68.6788,
    address: "820 Main Road, Holden, ME 04429",
+    mapLink: "https://maps.app.goo.gl/ENz9mvWm3t8LQs5N7",
     phone: "(207) 989-6267",
     hours: {
       mon: [[0,24]],
@@ -53,6 +54,7 @@ const vets = [
     lat: 44.1209,
     lng: -69.2570,
     address: "191 Camden Road, Warren, ME 04864",
+    mapLink: "https://maps.app.goo.gl/QkfCBqTFnfX2Hzsx7",
     phone: "(207) 273-1100",
     hours: {
       mon: [[17.5,24],[0,7.5]],
@@ -70,6 +72,7 @@ const vets = [
     lat: 44.0916,
     lng: -70.2148,
     address: "37 Strawberry Avenue, Lewiston, ME 04240",
+    mapLink: "https://maps.app.goo.gl/wKXj3TPc2QYoXfEd8",
     phone: "(207) 777-1110",
     hours: {
       mon: [[17,24],[0,8]],
@@ -87,6 +90,7 @@ const vets = [
     lat: 43.6795,
     lng: -70.3120,
     address: "739 Warren Avenue, Portland, ME 04103",
+    mapLink: "https://maps.app.goo.gl/NmkuKeRJBAF57uPWA",
     phone: "(207) 600-5044",
     hours: {
       mon: [[0,24]], tue: [[0,24]], wed: [[0,24]],
@@ -99,6 +103,7 @@ const vets = [
     lat: 43.5967,
     lng: -70.3370,
     address: "1500 Technology Way, Scarborough, ME 04074",
+    mapLink: "https://maps.app.goo.gl/syZZnidKkK7N57NH6",
     phone: "(207) 885-1290",
     hours: {
       mon: [[0,24]], tue: [[0,24]], wed: [[0,24]],
@@ -111,6 +116,7 @@ const vets = [
     lat: 46.5137,
     lng: -67.8665,
     address: "64 Main Street, Mars Hill, Maine 04758",
+    mapLink: "https://maps.app.goo.gl/zgeBr57uwWsxYzUEA",
     phone: "(207) 531-4905",
     hours: {
       mon: [],
@@ -128,6 +134,7 @@ const vets = [
     lat: 44.3106,
     lng: -69.7450,
     address: "525 Eastern Avenue, Augusta, Maine 04330",
+    mapLink: "https://maps.app.goo.gl/1HX5sEjzprFJcUaJ9",
     phone: "(207) 621-2287",
     hours: {
       mon: [[12,20]],
@@ -145,6 +152,7 @@ const vets = [
     lat: 43.8570,
     lng: -70.1037,
     address: "200 Lower Main Street, Freeport, Maine, 04032",
+    mapLink: "https://maps.app.goo.gl/yHXeh6fGojDkpeK19",
     phone: "(207) 805-5398",
     hours: {
       mon: [[10,20]], tue: [[10,20]], wed: [[10,20]],
@@ -273,7 +281,7 @@ function handleGeo(data) {
       `<b>${vet.name}</b><br>
       ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
       ${vet.distance.toFixed(1)} miles away<br>
-   ${vet.address ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(vet.address)}" target="_blank">${vet.address}</a>` : ""}<br>
+   ${vet.mapLink ? `<a href="${vet.mapLink}" target="_blank">📍 Open in Google Maps</a>` : ""}<br>
       ${vet.phone}<br><br>
       <b>Today:</b><br>
       ${formatHours(vet.hours[day])}`
