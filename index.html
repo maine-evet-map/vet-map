@@ -249,7 +249,7 @@ function handleGeo(data) {
   const userLat = parseFloat(data[0].lat);
   const userLng = parseFloat(data[0].lon);
 
-  map.setView([userLat, userLng], 10);
+  map.panTo([userLat, userLng]);
 
   const vetsWithStatus = vets
     .map(v => {
