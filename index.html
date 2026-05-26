@@ -228,12 +228,27 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 let markers = [];
+  showAllVets();
 
 function clearMarkers() {
   markers.forEach(m => map.removeLayer(m));
   markers = [];
 }
 
+function showAllVets() {
+  vets.forEach(vet => {
+    const marker = L.marker([vet.lat, vet.lng]).addTo(map);
+
+    marker.bindPopup(
+      `<b>${vet.name}</b><br>
+      ${vet.address}<br>
+      ${vet.phone}`
+    );
+
+    markers.push(marker);
+  });
+}
+  
 function search() {
   const address = document.getElementById("address").value;
 
