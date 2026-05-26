@@ -253,16 +253,26 @@ function clearMarkers() {
 }
 
 function showAllVets() {
+  clearMarkers();
+
+  const day = ["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()];
+
   vets.forEach(vet => {
+
+    const open = isOpenNow(vet.hours);
+
     const marker = L.marker(
-  [vet.lat, vet.lng],
-  { icon: isOpenNow(vet.hours) ? greenIcon : redIcon }
-).addTo(map);
+      [vet.lat, vet.lng],
+      { icon: open ? greenIcon : redIcon }
+    ).addTo(map);
 
     marker.bindPopup(
       `<b>${vet.name}</b><br>
-      ${vet.address}<br>
-      ${vet.phone}`
+      ${open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
+      ${vet.address ? `<a href="${vet.mapLink}" target="_blank">${vet.address}</a>` : ""}<br>
+      ${vet.phone}<br><br>
+      <b>Today:</b><br>
+      ${formatHours(vet.hours[day])}`
     );
 
     markers.push(marker);
