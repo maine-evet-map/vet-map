@@ -16,7 +16,7 @@
 
 <h2>Emergency Vet Finder</h2>
 
-<input id="address" placeholder="Enter location">
+<input id="address" placeholder="Enter location" onkeydown="if(event.key === 'Enter') search()">
 <button onclick="search()">Search</button>
 
 <div id="map"></div>
