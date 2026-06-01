@@ -204,13 +204,19 @@ function formatHours(ranges) {
   if (!ranges || ranges.length === 0) return "Closed";
 
   return ranges.map(([open, close]) => {
-    const fmt = h => {
-      const hour = Math.floor(h);
-      const min = Math.round((h - hour) * 60);
-      const ampm = hour >= 12 ? "PM" : "AM";
-      const h12 = ((hour + 11) % 12) + 1;
-      return `${h12}:${min.toString().padStart(2,"0")} ${ampm}`;
-    };
+const fmt = h => {
+  let hour = Math.floor(h);
+  const min = Math.round((h - hour) * 60);
+
+  if (hour === 24) {
+    hour = 0;
+  }
+
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const h12 = ((hour + 11) % 12) + 1;
+
+  return `${h12}:${min.toString().padStart(2,"0")} ${ampm}`;
+};
 
     return `${fmt(open)} – ${fmt(close)}`;
   }).join(" / ");
