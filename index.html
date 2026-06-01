@@ -327,7 +327,7 @@ function handleGeo(data) {
 userMarker = L.marker([userLat, userLng], {
   icon: whiteIcon
 }).addTo(map)
-.bindPopup("Search location")
+.bindPopup(data[0].display_name)
 .openPopup();
 
   map.panTo([userLat, userLng]);
