@@ -18,6 +18,23 @@
 
 <input id="address" placeholder="Enter location" onkeydown="if(event.key === 'Enter') search()">
 <button onclick="search()">Search</button>
+<button onclick="toggleVetSidebar()">Vet List</button>
+
+<div id="vetSidebar" style="
+  display:none;
+  position:absolute;
+  top:60px;
+  right:10px;
+  width:350px;
+  max-height:80vh;
+  overflow-y:auto;
+  background:white;
+  border:1px solid #ccc;
+  padding:10px;
+  z-index:1000;
+">
+  <div id="vetList"></div>
+</div>
 
 <div id="map"></div>
 
@@ -162,6 +179,48 @@ const vets = [
 
 ];
 
+  const vetDirectory = [
+  {
+    name: "Eastern Maine Emergency Vet",
+    website: "PUT WEBSITE HERE",
+    phone: "(207) 989-6267"
+  },
+  {
+    name: "Midcoast Animal Emergency Clinic",
+    website: "PUT WEBSITE HERE",
+    phone: "(207) 273-1100"
+  },
+  {
+    name: "Animal Emergency Clinic of Mid-Maine",
+    website: "PUT WEBSITE HERE",
+    phone: "(207) 777-1110"
+  },
+  {
+    name: "Portland Veterinary Emergency and Specialty",
+    website: "PUT WEBSITE HERE",
+    phone: "(207) 600-5044"
+  },
+  {
+    name: "Maine Veterinary Medical Center",
+    website: "PUT WEBSITE HERE",
+    phone: "(207) 885-1290"
+  },
+  {
+    name: "Aroostook Animal Emergency Services",
+    website: "PUT WEBSITE HERE",
+    phone: "(207) 531-4905"
+  },
+  {
+    name: "Atlas Veterinary Urgent Care",
+    website: "PUT WEBSITE HERE",
+    phone: "(207) 621-2287"
+  },
+  {
+    name: "PetMedic",
+    website: "PUT WEBSITE HERE",
+    phone: "(207) 805-5398"
+  }
+];
 
 // =====================
 // LOGIC
@@ -263,6 +322,40 @@ const whiteIcon = new L.Icon({
 });
   
   showAllVets();
+
+  populateVetList();
+
+function toggleVetSidebar() {
+  const sidebar = document.getElementById("vetSidebar");
+
+  sidebar.style.display =
+    sidebar.style.display === "none"
+      ? "block"
+      : "none";
+}
+
+function populateVetList() {
+  const list = document.getElementById("vetList");
+
+  list.innerHTML = "";
+
+  vetDirectory.forEach(vet => {
+
+    const div = document.createElement("div");
+
+    div.style.marginBottom = "15px";
+    div.style.paddingBottom = "10px";
+    div.style.borderBottom = "1px solid #ddd";
+
+    div.innerHTML = `
+      <b>${vet.name}</b><br>
+      <a href="${vet.website}" target="_blank">Website</a><br>
+      ${vet.phone}
+    `;
+
+    list.appendChild(div);
+  });
+}
 
 function clearMarkers() {
   markers.forEach(m => map.removeLayer(m));
