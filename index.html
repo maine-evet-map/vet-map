@@ -227,16 +227,6 @@ const fmt = h => {
 // DISPLAY
 // =====================
 
-const map = L.map('map');
-
-const maineBounds = L.latLngBounds(
-  [42.0, -71.0], // southwest corner
-  [47.5, -66.5]  // northeast corner
-);
-
-map.setMaxBounds(maineBounds);
-map.fitBounds(maineBounds);
-
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap'
 }).addTo(map);
