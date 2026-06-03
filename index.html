@@ -227,6 +227,8 @@ const fmt = h => {
 // DISPLAY
 // =====================
 
+  const map = L.map('map').setView([44.5, -69.5], 7);
+  
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap'
 }).addTo(map);
