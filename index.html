@@ -182,41 +182,49 @@ const vets = [
   const vetDirectory = [
   {
     name: "Eastern Maine Emergency Vet",
+    type: "Emergency",
     website: "https://emevc.com/",
     phone: "(207) 989-6267"
   },
   {
     name: "Midcoast Animal Emergency Clinic",
+    type: "Emergency",
     website: "https://midcoastaec.com/",
     phone: "(207) 273-1100"
   },
   {
     name: "Animal Emergency Clinic of Mid-Maine",
+    type: "Emergency",
     website: "https://aec-midmaine.com/",
     phone: "(207) 777-1110"
   },
   {
     name: "Portland Veterinary Emergency and Specialty",
+    type: "Emergency",
     website: "https://pvesc.com/",
     phone: "(207) 600-5044"
   },
   {
     name: "Maine Veterinary Medical Center",
+    type: "Emergency",
     website: "https://mvmc.vet/",
     phone: "(207) 885-1290"
   },
   {
     name: "Aroostook Animal Emergency Services",
+    type: "Emergency",
     website: "https://aroostookemergency.vet/",
     phone: "(207) 531-4905"
   },
   {
     name: "Atlas Veterinary Urgent Care",
+    type: "Urgent Care",
     website: "https://atlasveturgentcare.com/",
     phone: "(207) 621-2287"
   },
   {
     name: "PetMedic",
+    type: "Urgent Care",
     website: "https://petmedicurgentcare.com/locations/portland-me/",
     phone: "(207) 805-5398"
   }
@@ -339,8 +347,30 @@ function populateVetList() {
 
   list.innerHTML = "";
 
-  vetDirectory.forEach(vet => {
+  const emergency = vetDirectory.filter(v => v.type === "Emergency");
+  const urgent = vetDirectory.filter(v => v.type === "Urgent Care");
 
+  list.innerHTML += "<h4>Emergency Clinics</h4>";
+
+  emergency.forEach(vet => {
+    const div = document.createElement("div");
+
+    div.style.marginBottom = "15px";
+    div.style.paddingBottom = "10px";
+    div.style.borderBottom = "1px solid #ddd";
+
+    div.innerHTML = `
+      <b>${vet.name}</b><br>
+      <a href="${vet.website}" target="_blank">Website</a><br>
+      ${vet.phone}
+    `;
+
+    list.appendChild(div);
+  });
+
+  list.innerHTML += "<h4>Urgent Care</h4>";
+
+  urgent.forEach(vet => {
     const div = document.createElement("div");
 
     div.style.marginBottom = "15px";
