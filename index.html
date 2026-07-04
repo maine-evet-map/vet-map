@@ -294,6 +294,16 @@ const fmt = h => {
 // DISPLAY
 // =====================
 
+function getNotes(vetName) {
+  return localStorage.getItem("notes_" + vetName) || "";
+}
+
+function saveNotes(vetName) {
+  const box = document.getElementById("notes_" + vetName);
+  localStorage.setItem("notes_" + vetName, box.value);
+  alert("Notes saved!");
+}
+  
   const map = L.map('map').setView([44.5, -69.5], 7);
   
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -412,7 +422,22 @@ function showAllVets() {
       ${vet.address ? `<a href="${vet.mapLink}" target="_blank">${vet.address}</a>` : ""}<br>
       ${vet.phone}<br><br>
       <b>Today:</b><br>
-      ${formatHours(vet.hours[day])}`
+      ${formatHours(vet.hours[day])}
+      <br><br>
+
+<b>Notes:</b><br>
+
+<textarea
+id="notes_${vet.name}"
+rows="4"
+style="width:100%; box-sizing:border-box;"
+>${getNotes(vet.name)}</textarea>
+
+<br>
+
+<button onclick="saveNotes('${vet.name}')">
+Save Notes
+</button>`
     );
 
     markers.push(marker);
@@ -489,7 +514,22 @@ userMarker = L.marker([userLat, userLng], {
    ${vet.mapLink ? `<a href="${vet.mapLink}" target="_blank">${vet.address}</a>` : vet.address}<br>
       ${vet.phone}<br><br>
       <b>Today:</b><br>
-      ${formatHours(vet.hours[day])}`
+      ${formatHours(vet.hours[day])}
+      <br><br>
+
+<b>Notes:</b><br>
+
+<textarea
+id="notes_${vet.name}"
+rows="4"
+style="width:100%; box-sizing:border-box;"
+>${getNotes(vet.name)}</textarea>
+
+<br>
+
+<button onclick="saveNotes('${vet.name}')">
+Save Notes
+</button>`
     );
 
     markers.push(marker);
