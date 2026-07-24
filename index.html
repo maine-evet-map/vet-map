@@ -312,6 +312,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 let markers = [];
   let userMarker = null;
+  let searchLocation = "";
   const greenIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -419,7 +420,7 @@ function showAllVets() {
     marker.bindPopup(
       `<b>${vet.name}</b><br>
       ${open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
-      ${vet.address ? `<a href="${vet.mapLink}" target="_blank">${vet.address}</a>` : ""}<br>
+      ${vet.address ? `<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(searchLocation + ", Maine")}&destination=${encodeURIComponent(vet.address)}" target="_blank">${vet.address}</a>` : ""}<br>
       ${vet.phone}<br><br>
       <b>Today:</b><br>
       ${formatHours(vet.hours[day])}
@@ -451,6 +452,7 @@ map.fitBounds(bounds, {
   
 function search() {
   const address = document.getElementById("address").value + ", Maine";
+  searchLocation = document.getElementById("address").value;
 
   const script = document.createElement("script");
   script.src =
@@ -509,7 +511,7 @@ userMarker = L.marker([userLat, userLng], {
       `<b>${vet.name}</b><br>
       ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
       ${vet.distance.toFixed(1)} miles away<br>
-   ${vet.mapLink ? `<a href="${vet.mapLink}" target="_blank">${vet.address}</a>` : vet.address}<br>
+  ${vet.address ? `<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(searchLocation + ", Maine")}&destination=${encodeURIComponent(vet.address)}" target="_blank">${vet.address}</a>` : ""}<br>
       ${vet.phone}<br><br>
       <b>Today:</b><br>
       ${formatHours(vet.hours[day])}
