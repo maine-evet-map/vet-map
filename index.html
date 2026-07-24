@@ -185,9 +185,6 @@ const vets = [
     type: "Emergency",
     website: "https://emevc.com/",
     phone: "(207) 989-6267"
-      hours: [
-    "Sat, Sun, Mon: Open 24 hours<br>Tue, Wed, Thur, Fri: 5:30 PM - 8 AM"
-  ]
   },
   {
     name: "Midcoast Animal Emergency Clinic",
@@ -376,9 +373,7 @@ function populateVetList() {
     div.innerHTML = `
       <b>${vet.name}</b><br>
       <a href="${vet.website}" target="_blank">Website</a><br>
-      ${vet.phone} <br><br>
-<b>Hours:</b>
-<br>${vet.hours.join("<br>")}
+      ${vet.phone}
     `;
 
     list.appendChild(div);
@@ -396,9 +391,7 @@ function populateVetList() {
     div.innerHTML = `
       <b>${vet.name}</b><br>
       <a href="${vet.website}" target="_blank">Website</a><br>
-      ${vet.phone} <br><br>
-<b>Hours:</b>
-<br>${vet.hours.join("<br>")}
+      ${vet.phone}
     `;
 
     list.appendChild(div);
