@@ -431,13 +431,11 @@ function showAllVets() {
 id="notes_${vet.name}"
 rows="4"
 style="width:100%; box-sizing:border-box;"
+oninput="saveNotes('${vet.name}')"
 >${getNotes(vet.name)}</textarea>
 
-<br>
+<br>`
 
-<button onclick="saveNotes('${vet.name}')">
-Save Notes
-</button>`
     );
 
     markers.push(marker);
@@ -523,13 +521,11 @@ userMarker = L.marker([userLat, userLng], {
 id="notes_${vet.name}"
 rows="4"
 style="width:100%; box-sizing:border-box;"
+oninput="saveNotes('${vet.name}')"
 >${getNotes(vet.name)}</textarea>
 
-<br>
+<br>`
 
-<button onclick="saveNotes('${vet.name}')">
-Save Notes
-</button>`
     );
 
     markers.push(marker);
