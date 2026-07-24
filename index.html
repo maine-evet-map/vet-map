@@ -420,7 +420,12 @@ function showAllVets() {
     marker.bindPopup(
       `<b>${vet.name}</b><br>
       ${open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
-      ${vet.address ? `<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(searchLocation + ", Maine")}&destination=${encodeURIComponent(vet.address)}" target="_blank">${vet.address}</a>` : ""}<br>
+      ${vet.address ? `
+<a href="${
+  searchLocation
+    ? `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(searchLocation + ", Maine")}&destination=${encodeURIComponent(vet.address)}`
+    : vet.mapLink
+}" target="_blank">${vet.address}</a>` : ""}<br>
       ${vet.phone}<br><br>
       <b>Today:</b><br>
       ${formatHours(vet.hours[day])}
@@ -511,7 +516,12 @@ userMarker = L.marker([userLat, userLng], {
       `<b>${vet.name}</b><br>
       ${vet.open ? "🟢 OPEN NOW" : "🔴 CLOSED"}<br>
       ${vet.distance.toFixed(1)} miles away<br>
-  ${vet.address ? `<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(searchLocation + ", Maine")}&destination=${encodeURIComponent(vet.address)}" target="_blank">${vet.address}</a>` : ""}<br>
+  ${vet.address ? `
+<a href="${
+  searchLocation
+    ? `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(searchLocation + ", Maine")}&destination=${encodeURIComponent(vet.address)}`
+    : vet.mapLink
+}" target="_blank">${vet.address}</a>` : ""}<br>
       ${vet.phone}<br><br>
       <b>Today:</b><br>
       ${formatHours(vet.hours[day])}
