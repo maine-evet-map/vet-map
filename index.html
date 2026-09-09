@@ -301,6 +301,10 @@ function saveNotes(vetName) {
     localStorage.setItem("notes_" + vetName, box.value);
   }
 }
+
+  function getNotes(vetName) {
+  return localStorage.getItem("notes_" + vetName) || "";
+}
   
   const map = L.map('map').setView([44.5, -69.5], 7);
   
