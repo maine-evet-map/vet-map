@@ -294,14 +294,12 @@ const fmt = h => {
 // DISPLAY
 // =====================
 
-function getNotes(vetName) {
-  return localStorage.getItem("notes_" + vetName) || "";
-}
-
 function saveNotes(vetName) {
   const box = document.getElementById("notes_" + vetName);
-  localStorage.setItem("notes_" + vetName, box.value);
-  
+
+  if (box) {
+    localStorage.setItem("notes_" + vetName, box.value);
+  }
 }
   
   const map = L.map('map').setView([44.5, -69.5], 7);
@@ -443,6 +441,13 @@ oninput="saveNotes('${vet.name}')"
 <br>`
 
     );
+    
+    marker.on("popupopen", function() {
+      const box = document.getElementById("notes_" + vet.name);
+      if (box) {
+        box.value = getNotes(vet.name);
+      }
+    });
 
     markers.push(marker);
   });
@@ -539,6 +544,13 @@ oninput="saveNotes('${vet.name}')"
 <br>`
 
     );
+
+        marker.on("popupopen", function() {
+      const box = document.getElementById("notes_" + vet.name);
+      if (box) {
+        box.value = getNotes(vet.name);
+      }
+    });
 
     markers.push(marker);
 
