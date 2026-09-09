@@ -302,11 +302,61 @@ function saveNotes(vetName) {
   }
 }
 
-  function getNotes(vetName) {
+function updateVetMarker(vetName) {
+  const vet = vets.find(v => v.name === vetName);
+  if (!vet) return;
+
+  const marker = markers.find(m => m.getLatLng().lat === vet.lat && m.getLatLng().lng === vet.lng);
+  if (!marker) return;
+
+  const open = isOpenNow(vet.hours);
+
+  marker.setIcon(
+    getVetIcon(open ? greenIcon : redIcon, vet.name)
+  );
+}
+
+function getNotes(vetName) {
   return localStorage.getItem("notes_" + vetName) || "";
 }
-  
-  const map = L.map('map').setView([44.5, -69.5], 7);
+
+function getVetIcon(baseIcon, vetName) {
+  const hasNotes = getNotes(vetName).trim() !== "";
+
+  if (!hasNotes) {
+    return baseIcon;
+  }
+
+  return L.divIcon({
+    className: "",
+    html: `
+      <div style="position:relative; width:25px; height:41px;">
+        <img
+          src="${baseIcon.options.iconUrl}"
+          style="width:25px; height:41px;"
+        >
+        <span style="
+          position:absolute;
+          top:-8px;
+          right:-12px;
+          background:white;
+          border:1px solid #999;
+          border-radius:50%;
+          width:18px;
+          height:18px;
+          font-size:12px;
+          line-height:18px;
+          text-align:center;
+        ">📝</span>
+      </div>
+    `,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34]
+  });
+}
+
+const map = L.map('map').setView([44.5, -69.5], 7);
   
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap'
@@ -414,10 +464,10 @@ function showAllVets() {
 
     const open = isOpenNow(vet.hours);
 
-    const marker = L.marker(
-      [vet.lat, vet.lng],
-      { icon: open ? greenIcon : redIcon }
-    ).addTo(map);
+const marker = L.marker(
+  [vet.lat, vet.lng],
+  { icon: getVetIcon(open ? greenIcon : redIcon, vet.name) }
+).addTo(map);
 
     marker.bindPopup(
       `<b>${vet.name}</b><br>
@@ -439,7 +489,7 @@ function showAllVets() {
 id="notes_${vet.name}"
 rows="4"
 style="width:100%; box-sizing:border-box;"
-oninput="saveNotes('${vet.name}')"
+oninput="saveNotes('${vet.name}'); updateVetMarker('${vet.name}')"
 >${getNotes(vet.name)}</textarea>
 
 <br>`
@@ -516,9 +566,9 @@ userMarker = L.marker([userLat, userLng], {
   vetsWithStatus.forEach((vet) => {
     const day = ["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()];
 
-   const marker = L.marker(
+const marker = L.marker(
   [vet.lat, vet.lng],
-  { icon: vet.open ? greenIcon : redIcon }
+  { icon: getVetIcon(vet.open ? greenIcon : redIcon, vet.name) }
 ).addTo(map);
 
     marker.bindPopup(
@@ -542,7 +592,7 @@ userMarker = L.marker([userLat, userLng], {
 id="notes_${vet.name}"
 rows="4"
 style="width:100%; box-sizing:border-box;"
-oninput="saveNotes('${vet.name}')"
+oninput="saveNotes('${vet.name}'); updateVetMarker('${vet.name}')"
 >${getNotes(vet.name)}</textarea>
 
 <br>`
